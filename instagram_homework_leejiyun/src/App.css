@@ -1,0 +1,190 @@
+.font_fam{
+  color: var(--Black, #262626);
+  font-family: Abel;
+  src: url("./assets/Abel/Abel-Regular.woff") format("woff");
+}
+.donotscroll{
+  overflow: hidden;
+  height: 100%;
+  width:100%;
+  min-height:100%;
+}
+.App-hr-border{
+  margin-top: 0%;
+}
+
+.menubar_empty{
+  margin: 0 25%;
+  width: 50%;
+  height: 5%;
+}
+
+.image-Logo{
+  position: relative ;
+  width: 10%;
+  left: 0;
+  top: 2%; 
+}
+.image-Menu{
+  position: relative ;
+  left: 70%;
+  top: 10%; 
+  width: 15%;
+}
+.image-Mine{
+  position: relative ;
+  left: 70%;
+  bottom: 5px;
+  width: 2.5%;
+  height: 2.5%;
+  border-radius: 50px;
+}
+.main_part{
+  position: relative;
+
+  margin-left: 25%;
+  padding: 1% 0% 2% 0%;
+  width: 50%;
+  height: 5%;
+}
+.image-div{
+  position: relative;
+
+  display:inline-block;
+  border-top: 0;
+  width: 35%;
+  height: 100%;
+}
+.image-Main{
+  position: relative ;
+  margin-left: 18%;
+  width: 50%;
+  height: 50%;
+  border-radius: 100%;
+}
+.word_div1{
+  display:inline-block;
+  position: relative;
+  width: 10%;
+  height: 3em;
+  bottom: 4em; /*왜 %단위는 위치가 안변할까?*/
+}
+.word_div2{
+  position: relative;
+  left: 35%;
+  width: 50%;
+  font-size: 20px;
+  bottom: 4.5em; /*왜 %단위는 위치가 안변할까?*/
+}
+.word_div3{
+  position: relative;
+  left: 35%;
+  width: 50%;
+  bottom: 5em; /*왜 %단위는 위치가 안변할까?*/
+}
+.App-hr { 
+  width: 100%;
+  height: 1px;
+  flex-shrink: 0;
+}
+.App-hr2 { 
+  position: relative;
+  width: 50%;
+  height: 1px;
+  flex-shrink: 0;
+  top: -80px;
+
+}
+.my_name{
+  color: var(--Black, #262626);
+  font-family: Abel;
+  font-size: 1.5em;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 114.286% */
+  display: inline;
+}
+.button{
+  background-color: white;
+  position: relative;
+  display: inline-block;
+  top: -60%;
+  left: 110px;
+  border-radius: 4px;
+  padding: 5%;
+  border-color: #DBDBDB;
+  border-style: solid;
+  border-width: 1px;
+}
+.image-Option{
+  display: inline-block;
+
+  position: relative;
+
+  left: 210px;
+  top: -115%;
+}
+.word1{
+  position: relative;
+  left:6%;
+}
+.word2{
+  position: relative;
+  left:8%;
+}
+.Postsimg-div{
+  position: relative;
+  left:25%;
+  top: -70px;
+}
+.image-Post{
+  position: relative;
+  left: 16%;
+}
+.span-post{
+  position: relative;
+  left: 16.5%;
+}
+.image-Save{
+  position: relative;
+  left: 20%;
+}
+.span-save{
+  position: relative;
+  left: 20.5%;
+}
+.image-Tagged{
+  position: relative;
+  left: 24%;
+}
+.span-tag{
+  position: relative;
+  left: 24.5%;
+}
+.post-div{
+  position: relative;
+  left: 25%;
+}
+.image-post1{
+  position: relative;
+  display: inline-block;
+  width:15.6%;
+  height: 27.8;
+  left: 1%;
+}
+.image-post2{
+  position: relative;
+  display: inline-block;
+  width:15.6%;
+  height: 27.8;
+  left: 2%;
+}
+.image-post3{
+  position: relative;
+  display: inline-block;
+  width:15.6%;
+  height: 27.8;
+  left: 3%;
+}
+
+
