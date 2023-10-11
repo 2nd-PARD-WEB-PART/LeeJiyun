@@ -1,11 +1,10 @@
-import Topmenu from'./pages/Topmenu.js';
-import Mypage from './pages/Mypage.js';
-import Middlemenu from './pages/Middlemenu.js';
-import Posts from './pages/Posts.js';
-import './App.css';
+import Topmenu from'./Topmenu.js';
+import Mypage from './Mypage.js';
+import Middlemenu from './Middlemenu.js';
+import Posts from './Posts.js';
+import '../App.css';
 
-
-function App() {
+function Home() {
   return (
     
       <div className='font_fam'>
@@ -21,4 +20,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
