@@ -14,31 +14,3 @@
 
 
 
-.post-div{
-  background-color: red;
-  position: relative;
-  left: 25%;
-}
-.image-post1{
-  position: relative;
-  display: inline-block;
-  width:15.6%;
-  height: 27.8;
-  left: 1%;
-}
-.image-post2{
-  position: relative;
-  display: inline-block;
-  width:15.6%;
-  height: 27.8;
-  left: 2%;
-}
-.image-post3{
-  position: relative;
-  display: inline-block;
-  width:15.6%;
-  height: 27.8;
-  left: 3%;
-}
-
-
