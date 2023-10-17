@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Mine from '../assets/Abel/mine.jpg';
 import Option from '../assets/Abel/Options.jpg'; 
 import styled from 'styled-components';
@@ -97,7 +97,18 @@ const SpanMypage =styled.span`
     margin-right: 1.8%;
 `;
 
-function Mypage(props){
+function Mypage({userInfo}){
+    const [myUserInfo, setMyUserInfo] = useState(userInfo);
+    useEffect(() => {
+        // userInfo 상태가 변경될 때 myUserInfo 업데이트
+        setMyUserInfo(userInfo);
+    }, [userInfo]);
+
+    const myInfo = {
+        posts: 500,
+        follower: 255,
+        follow: 500
+    };
     return(
         <>
         <MypageLayout>
@@ -107,16 +118,18 @@ function Mypage(props){
                 </ImageMainDiv>
                 <Word>
                     <WordDiv1>
-                        <MyName>01_jiyun</MyName>
+                        <MyName>{myUserInfo.name}</MyName>
                         <Link to='/editprofile'>
                             <ProfileBtn>프로필 편집</ProfileBtn>
                         </Link>
-                        <ImageOption src={Option} alt="option"/>
+                        <Link to='/editprofile'>
+                            <ImageOption src={Option} alt="option"/>
+                        </Link>
                     </WordDiv1>
                     <WordDiv2>
-                        <SpanMypage>게시물 500</SpanMypage>
-                        <SpanMypage>팔로워 255</SpanMypage>
-                        <SpanMypage>팔로우 500</SpanMypage>
+                        <SpanMypage>게시물 {myInfo.posts}</SpanMypage>
+                        <SpanMypage>팔로워 {myInfo.follower} </SpanMypage>
+                        <SpanMypage>팔로우 {myInfo.follow} </SpanMypage>
                     </WordDiv2>
                     <WordDiv3>
                         <SpanMypage>Pay it forward</SpanMypage>

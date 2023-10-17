@@ -18,15 +18,9 @@ function Posts(){
     return(
         <>
             <PostDiv>
-                <Link to='/contents'>
                     <PostImg src={Post1} alt="post"/>
-                </Link>
-                <Link to='/contents'>
                     <PostImg src={Post2} alt="post2"/>
-                </Link>
-                <Link to='/contents'>
                     <PostImg src={Post3} alt="post3"/>
-                </Link>
             </PostDiv>
         </>
     )

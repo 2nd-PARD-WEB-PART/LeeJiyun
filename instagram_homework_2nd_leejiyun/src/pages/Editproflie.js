@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useRef} from "react";
 import styled from 'styled-components';
 import Meta from "../assets/meta.png"
 import Mine from '../assets/Abel/mine.jpg'
@@ -219,12 +219,11 @@ const FormSubmitDiv=styled.div`
 `;
 const FormSubmiBtn=styled.button`
   border-radius: 4px;
-  background: rgba(0, 149, 246, 0.25);
+  background: ${({ hasChanges }) => hasChanges ? 'rgba(0, 149, 246,1)' : 'rgba(0, 149, 246,0.25)'};
   width: 8.6%;
   height: 2.7vh;
   margin: 8.6vh 0 0 29%;
   border-radius: 4px;
-  background: rgba(0, 149, 246, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -238,7 +237,43 @@ const FormSubmiBtn=styled.button`
 `;
 
 
-function Editprofile() {
+
+function Editprofile({updateUserInfo}) {
+  const [newName, setNewName] = useState('01_jiyun');
+  const [newText, setNewText] = useState('최강 웹, 그리고 나');
+  const [newWebsite, setNewWebsite] = useState('https://naver.com');
+  const [newEmail, setNewEmail] = useState('12jiyun@gmail.com');
+  const [newGender, setNewGender] = useState('상남자');
+  const [hasChanges, setHasChanges] = useState(false);
+  const nameInputRef = useRef(null);
+  const updatedUserInfo = {
+    name: newName, // 새로운 이름
+    mytext: newText,
+    website: newWebsite,
+    email: newEmail,
+    gender: newGender,
+  };
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setHasChanges(true);
+    const updatedName = nameInputRef.current.value;
+
+    // 상태 업데이트
+    setNewName(updatedName);
+
+    const updatedUserInfo = {
+      name: updatedName, // 새로운 이름
+      mytext: newText,
+      website: newWebsite,
+      email: newEmail,
+      gender: newGender,
+    };
+
+    updateUserInfo(updatedUserInfo);
+  };
+  
+  
+
   return (
     <>
       <FontDiv>
@@ -271,39 +306,69 @@ function Editprofile() {
               <RightDivTop>
                 <ProfileImg src={Mine}/>
                 <ProfileTop>
-                  <ProfileName>01_jiyun</ProfileName>
+                  <ProfileName>{updatedUserInfo.name}</ProfileName>
                   <ProfileImgEditor>프로필 사진 바꾸기</ProfileImgEditor>
                 </ProfileTop>
               </RightDivTop>
               <RightDivForm>
-              <Form>
+              <Form onSubmit={handleFormSubmit} >
                 <FormTextDiv>
                   <NameDiv>
-                    <Input type="type" name="name" placeholder="01_jiyun" required />
+                    <Input 
+                      type="type" 
+                      name="name" 
+                      ref={nameInputRef}
+                      defaultValue={newName}
+                      placeholder={updatedUserInfo.name} 
+                      required />
                     <Label for="name">사용자 이름</Label>
                   </NameDiv>
                   <TextAreaDiv>
-                    <Text type="text" name="message" placeholder="최강 웹, 그리고 나" required />
+                    <Text 
+                      type="text" 
+                      name="message"
+                      value={newText}
+                      onChange={(e) => {setNewText(e.target.value);setHasChanges(true);}}
+                      placeholder={updatedUserInfo.mytext} 
+                      required />
                     <Label for="message">소개</Label>
                   </TextAreaDiv>
                   <UrlDiv>
-                    <Input type="url" name="url" placeholder="링크 추가하기" pattern="https://.*" required />
+                    <Input 
+                      type="url" 
+                      name="url" 
+                      value={newWebsite}
+                      onChange={(e) => {setNewWebsite(e.target.value);setHasChanges(true);}} 
+                      placeholder={updatedUserInfo.website} 
+                      required />
                     <Label for="url">웹사이트</Label>
                   </UrlDiv>
 
                   <EmailDiv>
-                    <Input type="email" name="eamil" placeholder="...@gmail.com" required/>
+                    <Input 
+                      type="email" 
+                      name="eamil" 
+                      value={newEmail}
+                      onChange={(e) => {setNewEmail(e.target.value); setHasChanges(true);}} 
+                      placeholder={updatedUserInfo.email} 
+                      required/>
                     <Label for="email">이메일</Label>
                   </EmailDiv>
 
                   <NameDiv>
-                    <Input type="type" name="sex" required />
+                    <Input 
+                      type="type" 
+                      name="sex" 
+                      value={newGender}
+                      onChange={(e) => {setNewGender(e.target.value);setHasChanges(true);}} 
+                      placeholder={updatedUserInfo.gender} 
+                      required />
                     <Label for="sex">성별</Label>
                   </NameDiv>
                   
                 </FormTextDiv>
                 <FormSubmitDiv>
-                  <FormSubmiBtn type="submit">제출</FormSubmiBtn>
+                  <FormSubmiBtn type="submit" hasChanges={hasChanges}>제출</FormSubmiBtn>
                 </FormSubmitDiv>
               </Form>
               </RightDivForm>

@@ -8,6 +8,8 @@ import Mine from '../assets/Abel/mine.jpg'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 const FontDiv= styled.div`
     color: var(--Black, #262626);
     font-family: Roboto;
@@ -89,6 +91,7 @@ const SearchBar = styled.input`
 `;
 
 function Topmenu(){
+    const location = useLocation();
     return(
         <div>
             <header>
@@ -96,20 +99,20 @@ function Topmenu(){
                     <Header>
                         <Menubar>
                             <TopImageLogo>
-                                <Link to='/home'>
+                                <Link to='/contents'>
                                     <ImageLogo src={Logo}/>
                                 </Link>
                             </TopImageLogo>
-                            <SearchBar placeholder='검색'/>
+                            {location.pathname === '/contents' && <SearchBar placeholder='검색'/>}
                             <TopImageToEditprofile>
                                 <ImageMenuDiv>
-                                    <Link to='/home'>
-                                        <ImageMenu src={HomeFill} alt="homefill"/>
+                                    <Link to='/contents'>
+                                        <ImageMenu src={location.pathname === '/editprofile' ? Home : HomeFill} alt="homefill"/>
                                     </Link>
                                     <ImageMenu src={Add} alt="add"/>
                                     <ImageMenu src={Like} alt="like"/>
-                                    <Link to='/editprofile'>
-                                    <ImageMine src={Mine}/>
+                                    <Link to='/home'>
+                                    <ImageMine src={Mine} alt="mine"/>
                                 </Link>
                                 </ImageMenuDiv>
                             </TopImageToEditprofile>

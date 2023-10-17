@@ -4,33 +4,35 @@ import Home from './pages/Home.js';
 import Editprofile from './pages/Editproflie.js';
 import Contents from './pages/Contents.js'
 import { Route, Routes } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import Mypage from './pages/Mypage.js';
 
 
 
 function App() {
-  const info = {
-    name: "01_jiyun",
-    posts: 500,
-    follower: 255,
-    follow: 500,
-    mytext: "최강 웹 그리고 나",
-    imageMine: "../assets/Abel/mine.jpg",
-    imagehome: "../assets/Home-fill.png",
-    imagelike: "../assets/likes.png",
+  const [userInfo, setUserInfo] = useState({
+    // 초기 사용자 정보
+    name: '01_jiyun',
+    mytext: '최강 웹, 그리고 나',
     website: '',
-    email:'12jiyun@gmail.com',
+    email: '12jiyun@gmail.com',
     gender: '상남자',
-    postLike: 1069 ,
-    CommentArray: []
-  };  
+  });
+
+  // 사용자 정보 업데이트 함수
+  const updateUserInfo = (updatedInfo) => {
+    setUserInfo(updatedInfo);
+  };
+  
 
   return (
     <Routes>
-      <Route path="/" element={<Topmenu />}>
-        <Route index path="/home" element={<Home />} />
-        <Route path="/editprofile" element={<Editprofile />} />
-        <Route path="/contents" element={<Contents />} />
+      <Route path="/" element={<Topmenu/>}>
+        <Route path="/editprofile" element={<Editprofile updateUserInfo={updateUserInfo} />} />
+        <Route index element={<Home userInfo={userInfo}/>} />
+        <Route path='/home' element={<Home userInfo={userInfo}/>} />
+        <Route path='/mypage' element={<Mypage userInfo={userInfo}/>} />
+        <Route path="/contents" element={<Contents userInfo={userInfo} />} />
       </Route>
     </Routes>
     

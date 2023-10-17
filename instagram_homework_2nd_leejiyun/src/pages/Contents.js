@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Post1 from "../assets/post1.jpg";
 import More from "../assets/More.png";
 import Emoji from "../assets/Emoji.png";
@@ -79,11 +79,12 @@ const PostComment=styled.div`
   width: 30.5vw;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   border-top: 1px solid;
   border-color: #FAFAFA;
 `;
 const Emoticon=styled.img`
-  margin: 0 0.5vw;
+  margin: -0.3vw 0.7vw;
   width: 1.1vw;
   height: 1.2vw;
 `;
@@ -113,6 +114,8 @@ const PostBody=styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 const PostBodyUI=styled.div`
   height: 30%;
@@ -158,7 +161,7 @@ const PostBodyTextDiv = styled.div`
   flex-direction: row;
 `;
 const PostBodyTextSpan=styled.span`
-  margin-right: 1.3vw;
+  width: 7vw;
   color: #000;
   font-size: 1.7vh;
   font-style: normal;
@@ -175,6 +178,30 @@ const PostBodyTextInput=styled.input`
   text-transform: lowercase;
   border: 0;
   display: flex;
+`;
+const CommentBodyTextSpan=styled.span`
+  width: 7vw;  
+  color: #000;
+  font-size: 1.7vh;
+  font-style: normal;
+  font-weight: 100;
+  line-height: 1.7vh; /* 128.571% */
+  text-transform: lowercase;
+`;
+const CommentBodyTextInput=styled.input`
+  width: 20.6vw;
+  color: #000;
+  font-size: 1.7vh;
+  font-style: normal;
+  font-weight: 100;
+  line-height: 1.5vh; /* 128.571% */
+  text-transform: lowercase;
+  border: 0;
+  display: flex;
+`;
+const CommentLikeImg=styled.img`
+  width: 1.7vh;
+  height: 1.7vh;
 `;
 const PostBodyTextSpan2=styled.span`
   color: var(--Gray, #8E8E8E);
@@ -208,7 +235,55 @@ const RightSpan = styled.span`
   text-transform: lowercase;
 `;
 
-function Contents() {
+function Contents({userInfo}) {
+  const [myUserInfo, setMyUserInfo] = useState(userInfo);
+    useEffect(() => {
+        // userInfo 상태가 변경될 때 myUserInfo 업데이트
+        setMyUserInfo(userInfo);
+    }, [userInfo]);
+    
+  const myLike = 1069;
+  
+  const [unliked, setUnliked] = useState(true);
+
+  const [post, setPost] = useState({
+    postLike: myLike,
+  });
+  
+  const handleLikeClick = () => {
+    setUnliked(!unliked); 
+  };
+  
+  useEffect(() => {
+    if (unliked === true) {
+      setPost({ postLike: parseInt(post.postLike, 10) - 1 });
+    } else {
+      setPost({ postLike: parseInt(post.postLike, 10) + 1 });
+    }
+  }, [unliked]);
+
+  const [comments, setComments] = useState([]); // 새로운 상태 추가
+  const commentInputRef = useRef(null); // input ref 생성
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    const newComment = {
+      text: commentInputRef.current.value,
+      liked: false,
+      likesCount: 8,
+    };
+    setComments([...comments, newComment]);
+    commentInputRef.current.value = ''; // input 필드 초기화
+  };
+
+  const handleCommentLike = (index) => {
+    setComments(comments.map((cmt, i) => 
+        i === index 
+          ? {...cmt, liked: !cmt.liked, likesCount: cmt.liked ? cmt.likesCount -1 : cmt.likesCount +1 } 
+          : cmt
+    ));
+  };
+
   return (
     <>
       <LargestDiv>
@@ -222,39 +297,56 @@ function Contents() {
                 </PostHeadLeft>
                 <PostMore src={More} alt="more"/>
               </PostHead>
-              <PostMain src={Post1} alt="poat1"/>
+              <PostMain src={Post1} alt="post1"/>
               <PostBody>
                 <PostBodyUI>
                   <PostBodyUILeft>
-                    <PostBodyUIImg src={Filledlike} alt="like"/>
+                    <PostBodyUIImg src={unliked !== true ? Filledlike : Like} alt="like" onClick={handleLikeClick}/>
                     <PostBodyUIImg src={Comment} />
                     <PostBodyUIImg src={Share} />
                   </PostBodyUILeft>
                   <PostBodyUIImg src={Save} />
                 </PostBodyUI>
                 <PostBodyText>
-                  <PostBodyTextDiv>좋아요 1070개</PostBodyTextDiv>
+                  <PostBodyTextDiv>좋아요 {post.postLike}</PostBodyTextDiv>
                   <PostBodyTextDiv>
                     <PostBodyTextSpan>supershyguy</PostBodyTextSpan>
                     <PostBodyTextInput type="text" value="파드 파이팅!" readOnly/>
                   </PostBodyTextDiv>
-                  <PostBodyTextDiv>
-                    <PostBodyTextSpan2>1 HOUR AGO</PostBodyTextSpan2>
-                  </PostBodyTextDiv>
+                  {comments.map((comment, index) => (
+                      <PostBodyTextDiv key={index}>
+                        <CommentBodyTextSpan>{myUserInfo.name}</CommentBodyTextSpan>
+                        <CommentBodyTextInput type="text" value={comment.text} readOnly/>
+
+                        <CommentLikeImg onClick={() => handleCommentLike(index)} src={comment.liked ? Filledlike : Like}/>
+                          
+                        
+                        {comment.likesCount}
+                      </PostBodyTextDiv>
+                    ))}
+                  {comments.length === 0 && (
+                    <PostBodyTextDiv>
+                      <PostBodyTextSpan2>1 HOUR AGO</PostBodyTextSpan2>
+                    </PostBodyTextDiv>
+                  )}
                 </PostBodyText>
               </PostBody>
+              
               <PostComment>
+              <form onSubmit={handleCommentSubmit}>
                 <Emoticon src={Emoji} alt="emoji"/>
-                <InputComment type="type" name="comment" placeholder="댓글 달기..."/>
+                <InputComment type="type" name="comment" ref={commentInputRef} placeholder="댓글 달기..."/>
                 <BtnComment type="submit">게시</BtnComment>
+                </form>
               </PostComment>
+              
             </PostDiv>
           </LeftDiv>
           <RightDiv>
-            <Link to='/editprofile'>
+            <Link to='/home'>
               <RightProfile src={Mine} alt="mine" />
             </Link>
-            <RightSpan>01_jiyun</RightSpan>
+            <RightSpan>{myUserInfo.name}</RightSpan>
           </RightDiv>
         </Center>
       </LargestDiv>
