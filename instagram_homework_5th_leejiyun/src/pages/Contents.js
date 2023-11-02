@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { UserInfoContext } from '../App';  // App.js에서 context 가져오기
 
-//창을 450px보다 작게 줄어들게 하는 법을 몰라서 미디어쿼리가 제대로 작동하는 모습을 보여주기 위해 600px, 750px을 기준으로 두고 작성
+//450이하일 때, 451~750일 때, 750보다 클 때를 상정하여 반응형으로 프로그램 작성
 
 const LikeContext = createContext();
 
@@ -33,16 +33,16 @@ const Center=styled.div`
   flex-direction: row;
   margin-left: 25vw;
 
-  @media (min-width: 750px) {
+  @media (min-width: 451px) and (max-width: 750px) {
       margin: 0 30vw;
       width: 40vw;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       margin: 0 20vw;
       width: 60vw;
   }
 `;
-//600px이하일 때만 화면 최하단부에 보여지는 메뉴바 작성
+//450px이하일 때만 화면 최하단부에 보여지는 메뉴바 작성
 const Lower=styled.div`
   background-color: #FAFAFA;
     width: 100vw;
@@ -52,7 +52,7 @@ const Lower=styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-  @media (min-width: 601px) {
+  @media (min-width: 451px) {
       display: none;
   }
 
@@ -63,11 +63,11 @@ const LeftDiv=styled.div`
   display: flex;
   flex-direction: column-reverse;
   
-  @media (min-width: 750px) {
+  @media (min-width: 451px) and (max-width: 750px) {
       width: 40vw;
       margin-left: 5vw;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 60vw;
   }
 `;
@@ -76,10 +76,10 @@ const PostDiv=styled.div`
   height: 81.4vh;
   display: flex;
   flex-direction: column;
-  @media (min-width: 750px) {
+  @media (min-width: 451px) and (max-width: 750px) {
       width: 40vw;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 60vw;
   }
 `;
@@ -90,7 +90,7 @@ const PostHead=styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 60vw;
       margin-top: -9vw;
   }
@@ -142,7 +142,7 @@ const PostMain=styled.img`
   height: 30.5vw;
   width: 30.5vw;
 
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 60vw;
       height: 60vw;
   }
@@ -156,7 +156,7 @@ const PostComment=styled.div`
   box-sizing: border-box;
   border-top: 1px solid;
   border-color: #FAFAFA;
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 60vw;
   }
 `;
@@ -176,7 +176,7 @@ const InputComment=styled.input`
   align-items: center;
   border: 0;
 
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 50vw;
   }
 `;
@@ -198,7 +198,7 @@ const PostBody=styled.div`
   overflow-y: auto;
   overflow-x: hidden;
 
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       width: 60vw;
   }
 `;
@@ -305,10 +305,10 @@ const RightDiv=styled.div`
   display: flex;
   flex-direction: row;
 
-  @media (min-width: 750px) {
+  @media (min-width: 451px) and (max-width: 750px) {
       display: none;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 450px) {
       display: none;
   }
 `;
@@ -382,7 +382,7 @@ function Contents() {
     <>
     <LikeContext.Provider value={{ post, setPost, comments, setComments }}>
       <LargestDiv>
-        <Lower>{/*화면 최하단부에 나타나는 메뉴바, 너비가 600보다 클 경우 사라짐, 링크도 걸어놓음*/}
+        <Lower>{/*화면 최하단부에 나타나는 메뉴바, 너비가 450보다 클 경우 사라짐, 링크도 걸어놓음, column-reverse로 하단부로 위치시킴*/}
           <LowerDiv>
             <Link to='/contents'>
               <Image src={HomeFill} alt="homefill"/>

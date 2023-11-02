@@ -35,11 +35,11 @@ const Menubar = styled.div`
     justify-content: space-between;
     padding-right: 0;
 
-    @media (min-width: 750px) {
+    @media (min-width: 451px) and (max-width: 750px) {
         margin: 0 30vw;
         width: 40vw;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 450px) {
         margin: 0 20vw;
         width: 60vw;
     }
@@ -69,7 +69,7 @@ const ImageLogo = styled.img`
 
 
 const ImageLogoLargeScreen = styled(ImageLogo)`
-    @media (max-width: 600px) {
+    @media (max-width: 450px) {
         display: none;
     }
 `;
@@ -85,7 +85,7 @@ const ImageMenuHome = styled.img`
     height: 2vh;
     cursor: pointer;
 
-    @media (max-width: 600px) {
+    @media (max-width: 450px) {
         display: none;
     }
 `;
@@ -94,7 +94,7 @@ const ImageMenuAdd = styled.img`
     height: 2vh;
     cursor: pointer;
 
-    @media (max-width: 600px) {
+    @media (max-width: 450px) {
         display: none;
     }
 `;
@@ -106,7 +106,7 @@ const ImageMenuLike = styled.img`
 //너비가 600보다 작을 때와 클 때의 이미지 로고가 달라짐
 //각 범주에 미디어 쿼리 사용해서 조건문 대용으로 사용 가능
 const ImageLogoSmallScreen = styled(ImageMenuLike)`
-    @media (min-width: 601px) {
+    @media (min-width: 451px) {
         display: none;
     }
 `;
@@ -116,7 +116,7 @@ const ImageMine = styled.img`
     border-radius: 50%;
     cursor: pointer;
 
-    @media (max-width: 600px) {
+    @media (max-width: 450px) {
         display: none;
     }
 `;
@@ -134,10 +134,10 @@ const SearchBar = styled.input`
     width: 20.8vw;
     height: 1.4vw;
     margin-right: 12vw;
-    @media (min-width: 750px) {
+    @media (min-width: 451px) and (max-width: 750px) {
         display: none;
     }
-    @media (max-width: 600px){
+    @media (max-width: 450px){
         margin-right: 15vw;
         font-size: 1.2vw;
         width: 60vw;
