@@ -9,7 +9,8 @@ import Mypage from './pages/Mypage.js';
 import Mine from './assets/Abel/mine.jpg';
 
 
-export const UserInfoContext = React.createContext(); //export해줌으로써 다른 파일에서 context api 갖다쓸수 있게 함
+export const UserInfoContext = React.createContext(); //export해줌으로써 다른 파일에서 context api 갖다쓸수 있게 하였음
+
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -36,7 +37,7 @@ function App() {
           <Route index element={<Home/>} />
           <Route path='/home' element={<Home/>} />
           <Route path='/mypage' element={<Mypage/>} />
-          <Route path="/contents" element={<Contents/>} />
+          <Route path="/contents" element={<Contents/>}/>
         </Route>
       </Routes>
     </UserInfoContext.Provider>
