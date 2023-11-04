@@ -198,6 +198,7 @@ const CommentBodyTextInput=styled.input`
   text-transform: lowercase;
   border: 0;
   display: flex;
+  outline: none;
 `;
 const CommentLikeImg=styled.img`
   width: 1.7vh;

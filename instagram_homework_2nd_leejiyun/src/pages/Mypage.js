@@ -89,7 +89,7 @@ const ProfileBtn = styled.button`
     cursor: pointer;
 `;
 const ImageOption= styled.img`
-    margin-top: 0.5vh;
+    margin-top: 0.9vh;
     display: inline-block;
     cursor: pointer;
 `;

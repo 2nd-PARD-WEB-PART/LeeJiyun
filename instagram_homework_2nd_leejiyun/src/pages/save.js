@@ -1,7 +1,8 @@
-import React, {useState, useRef, useContext} from "react";
+import React, {useState, useRef} from "react";
 import styled from 'styled-components';
 import Meta from "../assets/meta.png"
-import { UserInfoContext } from '../App';  // App.js에서 context 가져오기
+import Mine from '../assets/Abel/mine.jpg'
+
 
 const FontDiv= styled.div`
     color: var(--Black, #262626);
@@ -238,27 +239,21 @@ const FormSubmiBtn=styled.button`
 
 
 
-function Editprofile() {
-  const { userInfo, updateUserInfo } = useContext(UserInfoContext); // 수정된 컨텍스트 이름으로 가져오기
-
-  const [newName, setNewName] = useState(userInfo.name);
-  const [newText, setNewText] = useState(userInfo.mytext);
-  const [newWebsite, setNewWebsite] = useState(userInfo.website);
-  const [newEmail, setNewEmail] = useState(userInfo.email);
-  const [newGender, setNewGender] = useState(userInfo.gender);
+function Editprofile({updateUserInfo}) {
+  const [newName, setNewName] = useState('01_jiyun');
+  const [newText, setNewText] = useState('최강 웹, 그리고 나');
+  const [newWebsite, setNewWebsite] = useState('https://naver.com');
+  const [newEmail, setNewEmail] = useState('12jiyun@gmail.com');
+  const [newGender, setNewGender] = useState('상남자');
   const [hasChanges, setHasChanges] = useState(false);
-  const [newProfileImage, setNewProfileImage] = useState(userInfo.profile);
   const nameInputRef = useRef(null);
-  const profileImageRef = useRef();
   const updatedUserInfo = {
     name: newName, // 새로운 이름
     mytext: newText,
     website: newWebsite,
     email: newEmail,
     gender: newGender,
-    profile: newProfileImage,
   };
-
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -274,7 +269,6 @@ function Editprofile() {
       website: newWebsite,
       email: newEmail,
       gender: newGender,
-      profile: newProfileImage,
     };
     
     updateUserInfo(updatedUserInfo);
@@ -286,22 +280,6 @@ function Editprofile() {
 
   return (
     <>
-    <UserInfoContext.Provider value={{
-      newName,
-      setNewName,
-      newText,
-      setNewText,
-      newWebsite,
-      setNewWebsite,
-      newEmail,
-      setNewEmail,
-      newGender,
-      setNewGender,
-      hasChanges,
-      setHasChanges,
-      newProfileImage,
-      setNewProfileImage
-      }}>
       <FontDiv>
         <LargestDiv>
           <MainDiv>
@@ -330,26 +308,10 @@ function Editprofile() {
             </LeftDiv>
             <Form onSubmit={handleFormSubmit}>
               <RightDivTop>
-                <ProfileImg src={newProfileImage}/>
+                <ProfileImg src={Mine}/>
                 <ProfileTop>
                   <ProfileName>{updatedUserInfo.name}</ProfileName>
-                  <ProfileImgEditor onClick={() => profileImageRef.current.click()}>
-                    프로필 사진 바꾸기
-                  </ProfileImgEditor>
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    ref={profileImageRef}
-                    onChange={(e) => {
-                      if (e.target.files.length > 0) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setNewProfileImage(reader.result);
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
-                      }
-                    }}
-                  />
+                  <ProfileImgEditor>프로필 사진 바꾸기</ProfileImgEditor>
                 </ProfileTop>
               </RightDivTop>
               <RightDivForm>
@@ -418,7 +380,6 @@ function Editprofile() {
           </MainDiv>
         </LargestDiv>
       </FontDiv>
-    </UserInfoContext.Provider>
     </>  
   );
 }

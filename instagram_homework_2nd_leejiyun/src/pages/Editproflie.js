@@ -100,7 +100,7 @@ const BottomImg=styled.img`
   width: 3vw;
   height:auto;
 `;
-const RightDiv=styled.div`
+const Form=styled.form`
   width:76.1%;
   height:100%;
   display: flex;
@@ -143,7 +143,7 @@ const RightDivForm=styled.div`
   height: 80%;
   width: 100%;
 `;
-const Form=styled.form`
+const UnderForm=styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -234,6 +234,7 @@ const FormSubmiBtn=styled.button`
   font-weight: 500;
   line-height: normal;
   border: 0;
+  cursor: pointer;
 `;
 
 
@@ -245,22 +246,19 @@ function Editprofile({updateUserInfo}) {
   const [newEmail, setNewEmail] = useState('12jiyun@gmail.com');
   const [newGender, setNewGender] = useState('상남자');
   const [hasChanges, setHasChanges] = useState(false);
+  const [profileImage, setProfileImage] = useState(Mine); // 초기 프로필 이미지 설정
   const nameInputRef = useRef(null);
-  const updatedUserInfo = {
-    name: newName, // 새로운 이름
-    mytext: newText,
-    website: newWebsite,
-    email: newEmail,
-    gender: newGender,
-  };
+  const profileImageRef = useRef();
+
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setHasChanges(true);
     const updatedName = nameInputRef.current.value;
-
+    
     // 상태 업데이트
     setNewName(updatedName);
-
+    
     const updatedUserInfo = {
       name: updatedName, // 새로운 이름
       mytext: newText,
@@ -268,9 +266,11 @@ function Editprofile({updateUserInfo}) {
       email: newEmail,
       gender: newGender,
     };
-
+    
     updateUserInfo(updatedUserInfo);
-  };
+    };
+  
+  
   
   
 
@@ -302,7 +302,7 @@ function Editprofile({updateUserInfo}) {
                 </BottomSpan2>
               </Bottom>
             </LeftDiv>
-            <RightDiv>
+            <Form onSubmit={handleFormSubmit}>
               <RightDivTop>
                 <ProfileImg src={Mine}/>
                 <ProfileTop>
@@ -311,7 +311,7 @@ function Editprofile({updateUserInfo}) {
                 </ProfileTop>
               </RightDivTop>
               <RightDivForm>
-              <Form onSubmit={handleFormSubmit} >
+              <UnderForm>
                 <FormTextDiv>
                   <NameDiv>
                     <Input 
@@ -370,9 +370,9 @@ function Editprofile({updateUserInfo}) {
                 <FormSubmitDiv>
                   <FormSubmiBtn type="submit" hasChanges={hasChanges}>제출</FormSubmiBtn>
                 </FormSubmitDiv>
-              </Form>
+              </UnderForm>
               </RightDivForm>
-            </RightDiv>
+            </Form>
           </MainDiv>
         </LargestDiv>
       </FontDiv>

@@ -16,7 +16,7 @@ function App() {
   const [userInfo, setUserInfo] = useState({
     // 초기 사용자 정보
     name: '01_jiyun',
-    mytext: '최강 웹, 그리고 나',
+    mytext: '최강 웹, 그리고 나응',
     website: '',
     email: '12jiyun@gmail.com',
     gender: '상남자',
