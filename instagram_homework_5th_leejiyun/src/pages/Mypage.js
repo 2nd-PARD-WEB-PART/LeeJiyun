@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import Option from '../assets/Abel/Options.jpg'; 
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { UserInfoContext } from '../App';  // App.js에서 context 가져오기
+import axios from "axios";
 
 
 
@@ -99,29 +99,41 @@ const SpanMypage =styled.span`
 `;
 
 function Mypage(){
-    const { userInfo } = useContext(UserInfoContext); // UserInfoContext를 사용
-    const [myUserInfo, setMyUserInfo] = useState(userInfo);
+    const [data, setData] = useState();
 
     useEffect(() => {
-        // userInfo 상태가 변경될 때 myUserInfo 업데이트
-        setMyUserInfo(userInfo);
-    }, [userInfo]);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://3.35.236.83/pard/search/이지윤");
+                console.log("response: " + JSON.stringify(response.data.data));
+                setData(response.data.data);
+            } catch (error) {
+                console.log("error: " + error);
+            }
+            };
+        
+            fetchData();
+        }, []);
 
     const myInfo = {
         posts: 500,
         follower: 255,
         follow: 500
     };
+
+    if (!data) {
+        return null; // 또는 로딩 상태를 표시하는 UI를 반환할 수 있음
+    }
     return(
         <>
         <MypageLayout>
             <MainPart>
                 <ImageMainDiv>
-                    <ImageMain src={myUserInfo.profile} alt='Mine'/>
+                    <ImageMain src={data.imgURL} alt='Mine'/>
                 </ImageMainDiv>
                 <Word>
                     <WordDiv1>
-                        <MyName>{myUserInfo.name}</MyName>
+                        <MyName>{data.name}</MyName>
                         <Link to='/editprofile'>
                             <ProfileBtn>프로필 편집</ProfileBtn>
                         </Link>
@@ -135,7 +147,7 @@ function Mypage(){
                         <SpanMypage>팔로우 {myInfo.follow} </SpanMypage>
                     </WordDiv2>
                     <WordDiv3>
-                        <SpanMypage>{myUserInfo.mytext}</SpanMypage>
+                        <SpanMypage>최강 웹 그리고 나</SpanMypage>
                     </WordDiv3>
                 </Word>
             </MainPart>

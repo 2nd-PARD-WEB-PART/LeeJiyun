@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, createContext } from "react";
+import React, { useState, useEffect, useRef, createContext } from "react";
 import HomeFill from '../assets/Home-fill.png';
 import Add from '../assets/add.png';
 import Post1 from "../assets/post1.jpg";
@@ -12,7 +12,7 @@ import Share from "../assets/SharePosts.png";
 import Save from "../assets/PostSave.png";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { UserInfoContext } from '../App';  // App.js에서 context 가져오기
+import axios from 'axios';
 
 //450이하일 때, 451~750일 때, 750보다 클 때를 상정하여 반응형으로 프로그램 작성
 
@@ -330,12 +330,22 @@ const RightSpan = styled.span`
 `;
 
 function Contents() {
-  const { userInfo } = useContext(UserInfoContext); // UserInfoContext를 사용
-  const [myUserInfo, setMyUserInfo] = useState(userInfo);
-    useEffect(() => {
-        // userInfo 상태가 변경될 때 myUserInfo 업데이트
-        setMyUserInfo(userInfo);
-    }, [userInfo]);
+  const [data, setData] = useState();
+  {/*get으로 서버에 내장되어 있는 데이터들 불러오기*/}
+  {/*async, await으로 비동기처리*/}
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("http://3.35.236.83/pard/search/이지윤");
+            console.log("response: " + JSON.stringify(response.data.data));
+            setData(response.data.data);
+        } catch (error) {
+            console.log("error: " + error);
+        }
+        };
+    
+        fetchData();
+    }, []);
     
   const myLike = 1069;
   
@@ -379,6 +389,9 @@ function Contents() {
     ));
   };
 
+  if (!data) {
+    return null; // 또는 로딩 상태를 표시하는 UI를 반환할 수 있음
+  }
   return (
     <>
     <LikeContext.Provider value={{ post, setPost, comments, setComments }}>
@@ -390,7 +403,7 @@ function Contents() {
             </Link>
             <Image src={Add}/>
             <Link to='/home'>
-              <ImageMine src={Mine}/>
+              <ImageMine src={data.imgURL}/>
             </Link>
           </LowerDiv>
         </Lower>
@@ -422,7 +435,7 @@ function Contents() {
                   </PostBodyTextDiv>
                   {comments.map((comment, index) => (
                       <PostBodyTextDiv key={index}>
-                        <CommentBodyTextSpan>{myUserInfo.name}</CommentBodyTextSpan>
+                        <CommentBodyTextSpan>{data.name}</CommentBodyTextSpan>
                         <CommentBodyTextInput type="text" value={comment.text} readOnly/>
 
                         <CommentLikeImg onClick={() => handleCommentLike(index)} src={comment.liked ? Filledlike : Like}/>
@@ -451,9 +464,9 @@ function Contents() {
           </LeftDiv>
           <RightDiv>
             <Link to='/home'>
-              <RightProfile src={Mine} alt="mine" />
+              <RightProfile src={data.imgURL} alt="mine" />
             </Link>
-            <RightSpan>{myUserInfo.name}</RightSpan>
+            <RightSpan>{data.name}</RightSpan>
           </RightDiv>
         </Center>
       </LargestDiv>

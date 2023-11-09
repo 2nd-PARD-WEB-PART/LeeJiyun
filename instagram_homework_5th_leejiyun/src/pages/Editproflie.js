@@ -1,8 +1,9 @@
-import React, {useState, useRef, useContext} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import styled from 'styled-components';
 import Meta from "../assets/meta.png"
-import { UserInfoContext } from '../App';  // App.js에서 context 가져오기
-
+import Mine from "../assets/Abel/mine.jpg"
+import axios from "axios";
+import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 const FontDiv= styled.div`
     color: var(--Black, #262626);
     font-family: Roboto;
@@ -239,46 +240,77 @@ const FormSubmiBtn=styled.button`
 
 
 function Editprofile() {
-  const { userInfo, updateUserInfo } = useContext(UserInfoContext); // 수정된 컨텍스트 이름으로 가져오기
-
-  const [newName, setNewName] = useState(userInfo.name);
-  const [newText, setNewText] = useState(userInfo.mytext);
-  const [newWebsite, setNewWebsite] = useState(userInfo.website);
-  const [newEmail, setNewEmail] = useState(userInfo.email);
-  const [newGender, setNewGender] = useState(userInfo.gender);
+  const [data, setData] = useState({
+    // 초기 사용자 정보
+    name: '01_jiyun',
+    age: 23,
+    part: '최강 웹',
+    imgURL: Mine,
+  });
+  {/*get을 요청하는 함수 fetchData선언*/}
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("http://3.35.236.83/pard/search/이지윤");
+            console.log("response: " + JSON.stringify(response.data.data));
+            setData(response.data.data);
+        } catch (error) {
+            console.log("error: " + error);
+        }
+        };
+    
+        fetchData();
+    }, []);
+  
+    
+  const [newName, setNewName] = useState("");
+  const [newAge, setNewAge] = useState("");
+  const [newPart, setNewPart] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
-  const [newProfileImage, setNewProfileImage] = useState(userInfo.profile);
-  const nameInputRef = useRef(null);
+  const [newProfileImage, setNewProfileImage] = useState("");
   const profileImageRef = useRef();
-  const updatedUserInfo = {
-    name: newName, // 새로운 이름
-    mytext: newText,
-    website: newWebsite,
-    email: newEmail,
-    gender: newGender,
-    profile: newProfileImage,
+  if (!data) {
+    return null; // 또는 로딩 상태를 표시하는 UI를 반환할 수 있음
+  }
+  {/*사진 변경시 이미지 S_3서버에 업데이트, URL반환ㄴ */}
+  const handleFileUpload = (event) => {
+    const formData = new FormData();
+    
+    formData.append("image", event.target.files[0]);
+  
+    axios
+      .post("http://3.35.236.83/image", formData)
+      .then((response) => {
+        console.log("이미지가 성공적으로 업로드되었습니다:", response.data);
+        setNewProfileImage(response.data); // 이미지 URL 업데이트
+        console.log(newProfileImage);
+      })
+      .catch((error) => {
+        console.error("이미지 업로드 중 오류 발생:", error);
+      });
+  };
+  {/*버튼 클릭시 나이, 파트, 변경된 imgURL값 서버로 전송 */}
+  const handleButtonClick = async () => {
+    if (data && data.name) {
+      const id = data.name;
+      try {
+        const response = await axios.patch(
+          `http://3.35.236.83/pard/update/${id}`,
+          {
+            age: newAge,
+            part: newPart,
+            imgURL: newProfileImage,
+          }
+        );
+
+        console.log("response: " + JSON.stringify(response.data.data));
+        setData(response.data.data);
+      } catch (error) {
+        console.log("error: " + error);
+      }
+    }
   };
 
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setHasChanges(true);
-    const updatedName = nameInputRef.current.value;
-    
-    // 상태 업데이트
-    setNewName(updatedName);
-    
-    const updatedUserInfo = {
-      name: updatedName, // 새로운 이름
-      mytext: newText,
-      website: newWebsite,
-      email: newEmail,
-      gender: newGender,
-      profile: newProfileImage,
-    };
-    
-    updateUserInfo(updatedUserInfo);
-    };
   
   
   
@@ -286,22 +318,6 @@ function Editprofile() {
 
   return (
     <>
-    <UserInfoContext.Provider value={{
-      newName,
-      setNewName,
-      newText,
-      setNewText,
-      newWebsite,
-      setNewWebsite,
-      newEmail,
-      setNewEmail,
-      newGender,
-      setNewGender,
-      hasChanges,
-      setHasChanges,
-      newProfileImage,
-      setNewProfileImage
-      }}>
       <FontDiv>
         <LargestDiv>
           <MainDiv>
@@ -328,11 +344,11 @@ function Editprofile() {
                 </BottomSpan2>
               </Bottom>
             </LeftDiv>
-            <Form onSubmit={handleFormSubmit}>
+            <Form>
               <RightDivTop>
-                <ProfileImg src={newProfileImage}/>
+                <ProfileImg src={data.imgURL}/>
                 <ProfileTop>
-                  <ProfileName>{updatedUserInfo.name}</ProfileName>
+                  <ProfileName>{data.name}</ProfileName>
                   <ProfileImgEditor onClick={() => profileImageRef.current.click()}>
                     프로필 사진 바꾸기
                   </ProfileImgEditor>
@@ -340,15 +356,7 @@ function Editprofile() {
                     type="file"
                     style={{ display: "none" }}
                     ref={profileImageRef}
-                    onChange={(e) => {
-                      if (e.target.files.length > 0) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setNewProfileImage(reader.result);
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
-                      }
-                    }}
+                    onChange={handleFileUpload}
                   />
                 </ProfileTop>
               </RightDivTop>
@@ -359,12 +367,13 @@ function Editprofile() {
                     <Input 
                       type="type" 
                       name="name" 
-                      ref={nameInputRef}
-                      defaultValue={newName}
-                      placeholder={updatedUserInfo.name} 
+                      value={newName}
+                      onChange={(e) => {setNewName(e.target.value);setHasChanges(true);}} 
+                      placeholder={data.name} 
                       required />
                     <Label for="name">사용자 이름</Label>
                   </NameDiv>
+                  {/*
                   <TextAreaDiv>
                     <Text 
                       type="text" 
@@ -375,28 +384,29 @@ function Editprofile() {
                       required />
                     <Label for="message">소개</Label>
                   </TextAreaDiv>
+                  */}
                   <UrlDiv>
                     <Input 
-                      type="url" 
-                      name="url" 
-                      value={newWebsite}
-                      onChange={(e) => {setNewWebsite(e.target.value);setHasChanges(true);}} 
-                      placeholder={updatedUserInfo.website} 
+                      type="text" 
+                      name="age" 
+                      value={newAge}
+                      onChange={(e) => {setNewAge(e.target.value);setHasChanges(true);}} 
+                      placeholder={data.age} 
                       required />
-                    <Label for="url">웹사이트</Label>
+                    <Label for="age">나이</Label>
                   </UrlDiv>
 
                   <EmailDiv>
                     <Input 
-                      type="email" 
-                      name="eamil" 
-                      value={newEmail}
-                      onChange={(e) => {setNewEmail(e.target.value); setHasChanges(true);}} 
-                      placeholder={updatedUserInfo.email} 
+                      type="text" 
+                      name="part" 
+                      value={newPart}
+                      onChange={(e) => {setNewPart(e.target.value); setHasChanges(true);}} 
+                      placeholder={data.part} 
                       required/>
-                    <Label for="email">이메일</Label>
+                    <Label for="part">파트</Label>
                   </EmailDiv>
-
+                  {/*
                   <NameDiv>
                     <Input 
                       type="type" 
@@ -407,10 +417,10 @@ function Editprofile() {
                       required />
                     <Label for="sex">성별</Label>
                   </NameDiv>
-                  
+                */}
                 </FormTextDiv>
                 <FormSubmitDiv>
-                  <FormSubmiBtn type="submit" hasChanges={hasChanges}>제출</FormSubmiBtn>
+                  <FormSubmiBtn type="submit" hasChanges={hasChanges} onClick={handleButtonClick}>제출</FormSubmiBtn>
                 </FormSubmitDiv>
               </UnderForm>
               </RightDivForm>
@@ -418,7 +428,6 @@ function Editprofile() {
           </MainDiv>
         </LargestDiv>
       </FontDiv>
-    </UserInfoContext.Provider>
     </>  
   );
 }

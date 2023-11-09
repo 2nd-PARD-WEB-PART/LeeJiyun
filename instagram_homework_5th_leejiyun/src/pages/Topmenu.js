@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Logo from '../assets/Abel/Logo.png';
 import HomeFill from '../assets/Home-fill.png';
 import Home from '../assets/home.png';
@@ -9,7 +9,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { UserInfoContext } from '../App';  // App.js에서 context 가져오기
+import axios from "axios";
+
 
 
 const FontDiv= styled.div`
@@ -146,14 +147,27 @@ const SearchBar = styled.input`
 `;
 
 function Topmenu(){
-    const { userInfo } = useContext(UserInfoContext); // UserInfoContext를 사용
-    const [myUserInfo, setMyUserInfo] = useState(userInfo);
-
+    const [data, setData] = useState();
+    {/*get으로 서버에 내장되어 있는 데이터들 불러오기*/}
+    {/*async, await으로 비동기처리*/}
     useEffect(() => {
-        // userInfo 상태가 변경될 때 myUserInfo 업데이트
-        setMyUserInfo(userInfo);
-    }, [userInfo]);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://3.35.236.83/pard/search/이지윤");
+                console.log("response: " + JSON.stringify(response.data.data));
+                setData(response.data.data);
+            } catch (error) {
+                console.log("error: " + error);
+            }
+            };
+        
+            fetchData();
+        }, []);
     const location = useLocation();
+
+    if (!data) {
+        return null; // 또는 로딩 상태를 표시하는 UI를 반환할 수 있음
+    }
     return(
         <div>
             <header>
@@ -175,7 +189,7 @@ function Topmenu(){
                                     <ImageMenuAdd src={Add} alt="add"/>
                                     <ImageMenuLike src={Like} alt="like"/>
                                     <Link to='/home'>
-                                    <ImageMine src={myUserInfo.profile} alt="mine"/>
+                                    <ImageMine src={data.imgURL} alt="mine"/>
                                 </Link>
                                 </ImageMenuDiv>
                             </TopImageToEditprofile>
